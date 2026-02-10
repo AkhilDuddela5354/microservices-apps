@@ -1,0 +1,42 @@
+
+# Default profile - uses Git repository
+spring:
+  application:
+    name: config-server
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/AkhilDuddela5354/test-config-server.git
+          default-label: main
+          clone-on-start: true
+          search-paths:
+            - global
+            - services/{application}
+            - environments/{profile}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh
+
+server:
+  port: 8888
+
+---
+# Native profile - uses local filesystem (for development)
+spring:
+  config:
+    activate:
+      on-profile: native
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
+            - file:../test-config-server/global
+            - file:../test-config-server/services/{application}
+            - file:../test-config-server/environments/{profile}

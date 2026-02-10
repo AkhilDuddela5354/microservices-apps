@@ -1,0 +1,60 @@
+name: Part Inventory and Order Services
+services:
+#  mysql:
+#    image: mysql:latest
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: part_inventory_db
+##    ports:
+##      - "3306:3306"
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+
+  part-inventory-service:
+    image: ram1uj/part-inventory-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: part_inventory_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    restart: always
+    ports:
+      - "8081-8090:8080"
+#    depends_on:
+#      - mysql
+
+  part-order-service:
+    image: ram1uj/part-order-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: part_inventory_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      INVENTORY_SERVICE_URL: http://part-inventory-service:8080
+    restart: always
+    ports:
+      - "8091-8100:8080"
+#    depends_on:
+#      - mysql
+#      - part-inventory-service
+
+  part-gateway-service:
+    image: ram1uj/part-gateway-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      PORT: 8080
+      PART_INVENTORY_SERVICE_URL: http://part-inventory-service:8080
+      PART_ORDER_SERVICE_URL: http://part-order-service:8080
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - part-inventory-service
+      - part-order-service
+
+volumes:
+  mysql_data:

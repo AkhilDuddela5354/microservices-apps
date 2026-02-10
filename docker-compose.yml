@@ -1,0 +1,139 @@
+name: greenko-microservices
+
+networks:
+  greenko-network:
+
+services:
+  # Spring Cloud Config Server
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    image: config-server:latest
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - greenko-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    restart: always
+
+  # Asset Service
+  asset-service:
+    build:
+      context: ./asset-service
+      dockerfile: Dockerfile
+    image: asset-service:latest
+    container_name: asset-service
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: greenko_db
+    networks:
+      - greenko-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+    restart: always
+
+  # Telemetry Service
+  telemetry-service:
+    build:
+      context: ./telemetry-service
+      dockerfile: Dockerfile
+    image: telemetry-service:latest
+    container_name: telemetry-service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      ASSET_SERVICE_URL: http://asset-service:8080
+    networks:
+      - greenko-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+      asset-service:
+        condition: service_started
+    restart: always
+
+  # Alert Service
+  alert-service:
+    build:
+      context: ./alert-service
+      dockerfile: Dockerfile
+    image: alert-service:latest
+    container_name: alert-service
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      TELEMETRY_SERVICE_URL: http://telemetry-service:8080
+    networks:
+      - greenko-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+      telemetry-service:
+        condition: service_started
+    restart: always
+
+  # Gateway Service
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    image: gateway-service:latest
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      ASSET_SERVICE_URL: http://asset-service:8080
+      TELEMETRY_SERVICE_URL: http://telemetry-service:8080
+      ALERT_SERVICE_URL: http://alert-service:8080
+    networks:
+      - greenko-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+      asset-service:
+        condition: service_started
+      telemetry-service:
+        condition: service_started
+      alert-service:
+        condition: service_started
+    restart: always
+
+# Uncomment if you want to use MySQL instead of H2
+#  mysql:
+#    image: mysql:8.0
+#    container_name: greenko-mysql
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: greenko_db
+#    networks:
+#      - greenko-network
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#    restart: always
+#
+#volumes:
+#  mysql-data:
+

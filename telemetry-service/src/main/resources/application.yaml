@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: telemetry-service
+
+  config:
+    import: optional:configserver:http://config-server:8888
+
+  profiles:
+    active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh
+
+#springdoc:
+#  api-docs:
+#    path: /v3/api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    use-root-path: true
+

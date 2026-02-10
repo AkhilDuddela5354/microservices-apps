@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: alert-service
+  
+  datasource:
+    url: jdbc:h2:mem:alertdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+logging:
+  level:
+    com.greenko.alertservice: DEBUG
