@@ -60,5 +60,3 @@ logs/
 *.temp
 
 
-# Separate config repository
-test-config-server/

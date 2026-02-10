@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:greenko}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8080
+
+asset-service:
+  url: ${ASSET_SERVICE_URL:http://localhost:8081}

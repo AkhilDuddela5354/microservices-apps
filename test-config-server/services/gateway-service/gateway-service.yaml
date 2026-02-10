@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: asset-service
+          uri: ${ASSET_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/assets/**
+
+        - id: asset-service-web
+          uri: ${ASSET_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/assets/**
+          filters:
+            - StripPrefix=1
+
+        - id: telemetry-service
+          uri: ${TELEMETRY_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/telemetry/**
+
+        - id: telemetry-service-web
+          uri: ${TELEMETRY_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/telemetry/**
+          filters:
+            - StripPrefix=1
+
+        - id: alert-service
+          uri: ${ALERT_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/alerts/**
+
+        - id: alert-service-web
+          uri: ${ALERT_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/alerts/**
+          filters:
+            - StripPrefix=1
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,gateway
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Asset Service
+        url: /assets/v3/api-docs
+      - name: Telemetry Service
+        url: /telemetry/v3/api-docs
+      - name: Alert Service
+        url: /alerts/v3/api-docs
