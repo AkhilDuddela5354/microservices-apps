@@ -1,10 +1,8 @@
 global:
-  scrape_interval: 15s      # How often to scrape targets
-  evaluation_interval: 15s  # How often to evaluate rules
+  scrape_interval: 15s
+  evaluation_interval: 15s
 
-# Scrape configurations
 scrape_configs:
-  # Job 1: Monitor Spring Boot Microservices
   - job_name: 'spring-boot-services'
     metrics_path: '/actuator/prometheus'
     static_configs:
@@ -17,7 +15,6 @@ scrape_configs:
         labels:
           application: 'greenko-microservices'
 
-  # Job 2: Monitor cAdvisor (Container Metrics)
   - job_name: 'cadvisor'
     static_configs:
       - targets:
@@ -25,7 +22,6 @@ scrape_configs:
         labels:
           service: 'container-metrics'
 
-  # Job 3: Monitor Prometheus itself
   - job_name: 'prometheus'
     static_configs:
       - targets:
