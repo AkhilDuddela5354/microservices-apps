@@ -9,45 +9,44 @@ spring:
   
   cloud:
     gateway:
-      routes:
-        # Asset Service Routes
-        - id: asset-service
-          uri: ${ASSET_SERVICE_URL:http://asset-service:8080}
-          predicates:
-            - Path=/api/assets/**
+      server:
+        webflux:
+          routes:
+            - id: asset-service
+              uri: ${ASSET_SERVICE_URL:http://asset-service:8080}
+              predicates:
+                - Path=/api/assets/**
 
-        - id: asset-service-web
-          uri: ${ASSET_SERVICE_URL:http://asset-service:8080}
-          predicates:
-            - Path=/assets/**
-          filters:
-            - StripPrefix=1
+            - id: asset-service-web
+              uri: ${ASSET_SERVICE_URL:http://asset-service:8080}
+              predicates:
+                - Path=/assets/**
+              filters:
+                - StripPrefix=1
 
-        # Telemetry Service Routes
-        - id: telemetry-service
-          uri: ${TELEMETRY_SERVICE_URL:http://telemetry-service:8080}
-          predicates:
-            - Path=/api/telemetry/**
+            - id: telemetry-service
+              uri: ${TELEMETRY_SERVICE_URL:http://telemetry-service:8080}
+              predicates:
+                - Path=/api/telemetry/**
 
-        - id: telemetry-service-web
-          uri: ${TELEMETRY_SERVICE_URL:http://telemetry-service:8080}
-          predicates:
-            - Path=/telemetry/**
-          filters:
-            - StripPrefix=1
+            - id: telemetry-service-web
+              uri: ${TELEMETRY_SERVICE_URL:http://telemetry-service:8080}
+              predicates:
+                - Path=/telemetry/**
+              filters:
+                - StripPrefix=1
 
-        # Alert Service Routes
-        - id: alert-service
-          uri: ${ALERT_SERVICE_URL:http://alert-service:8080}
-          predicates:
-            - Path=/api/alerts/**
+            - id: alert-service
+              uri: ${ALERT_SERVICE_URL:http://alert-service:8080}
+              predicates:
+                - Path=/api/alerts/**
 
-        - id: alert-service-web
-          uri: ${ALERT_SERVICE_URL:http://alert-service:8080}
-          predicates:
-            - Path=/alerts/**
-          filters:
-            - StripPrefix=1
+            - id: alert-service-web
+              uri: ${ALERT_SERVICE_URL:http://alert-service:8080}
+              predicates:
+                - Path=/alerts/**
+              filters:
+                - StripPrefix=1
 
 # Additional actuator endpoints for gateway
 management:
