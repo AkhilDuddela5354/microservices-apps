@@ -18,5 +18,16 @@ spring:
   sql:
     init:
       mode: always
+
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
