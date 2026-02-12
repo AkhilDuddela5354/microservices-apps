@@ -1,9 +1,40 @@
+# Common configuration for ALL microservices
+# Applied to every service automatically by Spring Cloud Config
+
 management:
   endpoint:
     health:
       probes:
         enabled: true
+      show-details: when-authorized
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,info,refresh,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+# Common logging configuration
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.greenko: DEBUG
+
+# Common Spring Boot settings
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true

@@ -1,5 +1,14 @@
+# Asset Service - Profile-independent configuration
+# These settings apply to all environments (dev, prod, etc.)
+
+server:
+  port: 8080
+
 spring:
   application:
     name: asset-service
-
-
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

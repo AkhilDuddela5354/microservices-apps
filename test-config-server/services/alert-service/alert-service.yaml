@@ -1,5 +1,24 @@
+# Alert Service - Profile-independent configuration
+
+server:
+  port: 8080
+
 spring:
   application:
     name: alert-service
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
+# Service URLs for inter-service communication
+telemetry-service:
+  url: ${TELEMETRY_SERVICE_URL:http://telemetry-service:8080}
 
+# SpringDoc OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

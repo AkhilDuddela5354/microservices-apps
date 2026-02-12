@@ -1,20 +1,10 @@
+# Alert Service - Minimal Local Configuration
+# All other configurations are fetched from Config Server
+
 spring:
   application:
     name: alert-service
-
   config:
     import: optional:configserver:http://config-server:8888
-
   profiles:
     active: dev
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,refresh,prometheus,metrics
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-

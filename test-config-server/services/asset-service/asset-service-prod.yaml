@@ -1,17 +1,27 @@
+# Asset Service - Production Environment
+# MySQL database for production
+
 spring:
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:greenko}
+    url: jdbc:mysql://${MYSQL_HOST:mysql}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:assets_db}
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:password}
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+      ddl-auto: validate
+    show-sql: false
+
   sql:
     init:
       mode: never
+
+logging:
+  level:
+    com.greenko.assetservice: INFO
+    org.hibernate.SQL: WARN

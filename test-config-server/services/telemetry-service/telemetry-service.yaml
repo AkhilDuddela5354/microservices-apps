@@ -1,5 +1,24 @@
+# Telemetry Service - Profile-independent configuration
+
+server:
+  port: 8080
+
 spring:
   application:
     name: telemetry-service
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
+# Service URLs for inter-service communication
+asset-service:
+  url: ${ASSET_SERVICE_URL:http://asset-service:8080}
 
+# SpringDoc OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

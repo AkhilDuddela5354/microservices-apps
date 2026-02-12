@@ -1,41 +1,22 @@
-
+# Alert Service - Development Environment
 
 spring:
   datasource:
     url: jdbc:h2:mem:alerts
     username: sa
     password:
+    driver-class-name: org.h2.Driver
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
   sql:
     init:
       mode: always
 
-server:
-  port: 8080
-
-telemetry-service:
-  url: ${TELEMETRY_SERVICE_URL:http://localhost:8082}
-
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,refresh,prometheus,metrics
-  metrics:
-    export:
-      prometheus:
-        enabled: true
+logging:
+  level:
+    com.greenko.alertservice: DEBUG
+    org.hibernate.SQL: DEBUG
