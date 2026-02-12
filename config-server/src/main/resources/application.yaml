@@ -20,7 +20,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,refresh
+        include: health,info,refresh,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 
 server:
   port: 8888

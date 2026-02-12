@@ -12,7 +12,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,refresh,metrics
+        include: health,info,refresh,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 
 #springdoc:
 #  api-docs:
