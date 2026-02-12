@@ -8,13 +8,13 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/AkhilDuddela5354/test-config-server.git
+          uri: https://github.com/AkhilDuddela5354/microservices-apps.git
           default-label: main
           clone-on-start: true
           search-paths:
-            - global
-            - services/{application}
-            - environments/{profile}
+            - test-config-server/global
+            - test-config-server/services/{application}
+            - test-config-server/environments/{profile}
 
 management:
   endpoints:
