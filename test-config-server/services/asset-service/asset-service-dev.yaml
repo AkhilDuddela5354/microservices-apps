@@ -15,7 +15,12 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
+
+  flyway:
+    enabled: true
+    locations: classpath:db/dev-migration
+    baseline-on-migrate: true
 
 logging:
   level:

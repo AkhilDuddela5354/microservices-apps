@@ -10,7 +10,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,refresh,prometheus,metrics
+        include: health,info,refresh,prometheus,metrics,env,beans,loggers
   metrics:
     export:
       prometheus:
@@ -20,11 +20,20 @@ management:
         http:
           server:
             requests: true
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+    export:
+      zipkin:
+        endpoint: http://${ZIPKIN_HOST:zipkin}:${ZIPKIN_PORT:9411}/api/v2/spans
 
-# Common logging configuration
+# Common logging configuration with tracing
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+    level: "%5p [traceId=%X{traceId} spanId=%X{spanId}]"
   level:
     root: INFO
     com.greenko: DEBUG
