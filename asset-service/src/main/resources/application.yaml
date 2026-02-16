@@ -1,10 +1,43 @@
-# Asset Service - Minimal Local Configuration
-# All other configurations are fetched from Config Server
+logging:
+  level:
+    root: INFO
+    com.greenko.assetservice.api: DEBUG
+
 
 spring:
   application:
     name: asset-service
-  config:
-    import: optional:configserver:http://config-server:8888
+
+
+
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+
   profiles:
     active: dev
+
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}
+
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: health, refresh, env, beans, loggers, metrics, prometheus, info
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# zipkin config

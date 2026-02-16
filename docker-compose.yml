@@ -38,6 +38,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: greenko_db
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
       - greenko-network
     depends_on:
@@ -57,6 +58,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       ASSET_SERVICE_URL: http://asset-service:8080
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
       - greenko-network
     depends_on:
@@ -78,6 +80,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       TELEMETRY_SERVICE_URL: http://telemetry-service:8080
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
       - greenko-network
     depends_on:
@@ -101,6 +104,7 @@ services:
       ASSET_SERVICE_URL: http://asset-service:8080
       TELEMETRY_SERVICE_URL: http://telemetry-service:8080
       ALERT_SERVICE_URL: http://alert-service:8080
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
       - greenko-network
     depends_on:
@@ -164,6 +168,15 @@ services:
       - greenko-network
     depends_on:
       - prometheus
+    restart: always
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - greenko-network
     restart: always
 
 volumes:

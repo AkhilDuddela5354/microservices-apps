@@ -12,8 +12,8 @@ RUN --mount=type=cache,target=/root/.m2 \
 
 # Runtime stage
 FROM amazoncorretto:25-jdk
+RUN yum install curl-minimal -y
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

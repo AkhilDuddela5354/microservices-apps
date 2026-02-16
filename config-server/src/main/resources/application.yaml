@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: config-server
@@ -6,38 +7,29 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/AkhilDuddela5354/microservices-apps.git
+          uri: https://github.com/ramanujds/greenko-config-server
           default-label: main
           clone-on-start: true
           search-paths:
-            - test-config-server/global
-            - test-config-server/services/{application}
-            - test-config-server/environments/{profile}
+            - global
+            - services/*
+            - environments/{profile}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,refresh,prometheus,metrics
-  metrics:
-    export:
-      prometheus:
-        enabled: true
 
 server:
   port: 8888
 
----
-spring:
-  config:
-    activate:
-      on-profile: native
+management:
 
-  cloud:
-    config:
-      server:
-        native:
-          search-locations:
-            - file:../test-config-server/global
-            - file:../test-config-server/services/{application}
-            - file:../test-config-server/environments/{profile}
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,env,beans,loggers,metrics,prometheus
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
