@@ -32,7 +32,7 @@ services:
       - "8081:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_USER: root
@@ -56,7 +56,7 @@ services:
       - "8082:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       ASSET_SERVICE_URL: http://asset-service:8080
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
@@ -78,7 +78,7 @@ services:
       - "8083:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       TELEMETRY_SERVICE_URL: http://telemetry-service:8080
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     networks:
@@ -100,7 +100,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       ASSET_SERVICE_URL: http://asset-service:8080
       TELEMETRY_SERVICE_URL: http://telemetry-service:8080
       ALERT_SERVICE_URL: http://alert-service:8080
