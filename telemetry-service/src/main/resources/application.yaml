@@ -1,46 +1,10 @@
+# Telemetry Service - Minimal Local Configuration
+# All other configurations are fetched from Config Server
+
 spring:
   application:
     name: telemetry-service
-
+  config:
+    import: optional:configserver:http://config-server:8888
   profiles:
     active: dev
-
-#springdoc:
-#  api-docs:
-#    path: /v3/api-docs
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    use-root-path: true
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0   # dev only
-    export:
-      zipkin:
-        endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
-
-  info:
-    env:
-      enabled: true
-  endpoint:
-    health:
-      probes:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health, refresh, env, beans, loggers, metrics, prometheus, info
-
-  metrics:
-    tags:
-      application: ${spring.application.name}
-
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId} spanId=%X{spanId}]"
-
-
-
-
-

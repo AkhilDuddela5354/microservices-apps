@@ -1,73 +1,10 @@
+# Gateway Service - Minimal Local Configuration
+# All other configurations are fetched from Config Server
+
 spring:
   application:
     name: gateway-service
-
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: asset-service
-              uri: ${ASSET_SERVICE_URL:http://localhost:8081}
-              predicates:
-                - Path=/api/assets/**
-              filters:
-#                - StripPrefix=2
-
-            - id: asset-service-web
-              uri: ${ASSET_SERVICE_URL:http://localhost:8081}
-              predicates:
-                - Path=/assets/**
-              filters:
-                - StripPrefix=1
-
-            - id: telemetry-service
-              uri: ${TELEMETRY_SERVICE_URL:http://localhost:8082}
-              predicates:
-                - Path=/api/telemetry/**
-              filters:
-#                - StripPrefix=2
-
-            - id: telemetry-service-web
-              uri: ${TELEMETRY_SERVICE_URL:http://localhost:8082}
-              predicates:
-                - Path=/telemetry/**
-              filters:
-                - StripPrefix=1
-
-springdoc:
-  swagger-ui:
-    path: /
-    urls:
-      - name: Asset Service
-        url: /assets/v3/api-docs
-      - name: Telemetry Service
-        url: /telemetry/v3/api-docs
-
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0   # dev only
-    export:
-      zipkin:
-        endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
-
-  info:
-    env:
-      enabled: true
-  endpoint:
-    health:
-      probes:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health, refresh, env, beans, loggers, metrics, prometheus, info
-  metrics:
-    tags:
-      application: ${spring.application.name}
-
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId} spanId=%X{spanId}]"
+  config:
+    import: optional:configserver:http://config-server:8888
+  profiles:
+    active: default
